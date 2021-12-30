@@ -1,41 +1,54 @@
-import React, { Component, useContext } from 'react';
+import React, { useContext } from 'react';
 import { appContext } from './context';
 
 function Navbar() {
-    const context = useContext(appContext);
-    const [state, setState] = context;
-    console.log("appContext", context);
+    const [appState, appSetState] = useContext(appContext);
     
     const toggleDarkMode = () => {
-        const newState = {...state};
+        const newState = {...appState};
         if(newState.darkModeOn){
             newState.darkModeOn = false;
-            console.log("Dark Mode OFF.")
+            console.log("Dark Mode turned OFF.")
         }else{
             newState.darkModeOn = true;
-            console.log("Dark Mode ON.")   
+            console.log("Dark Mode turned ON.")   
         }
-        setState(newState);
+        appSetState(newState);
+    };
+
+    const getNavBarClasses = () => {
+        let classes = "navbar navbar-expand-sm p-3 mb-1";
+        classes += appState.darkModeOn === true ? " navbar-dark bg-dark" : "navbar-light bg-light";
+        return classes;
     };
 
     return (
-        <div className="Navbar">
-            <header>
-                <nav className="navbar navbar-dark bg-dark p-3 mb-1">
-                    <a className="navbar-brand" href="#">Sawan Drycleaners</a>
-                    <div className="collapse navbar-collapse" id="navbarCollapse">
-                        <ul className="navbar-nav mr-auto">
-                            <li className="nav-item active">
-                                <a className="nav-link" href="#">Home</a>
+        <div>
+            <nav className={getNavBarClasses()}>
+                <div class="container">
+                    <a className="navbar-brand" href="#"><strong>Sawan Drycleaners</strong></a>
+                    <div>
+                        <ul className="navbar-nav">
+                            <li className="nav-item ">
+                                <a className="nav-link" href="#"><strong>Home</strong></a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="#">Bookings</a>
+                                <a className="nav-link" href="#"><strong>Bookings</strong></a>
+                            </li>
+                            <li className="nav-item">
+                                <a onClick={toggleDarkMode} className="nav-link a-button"><strong>DarkMode</strong></a>
                             </li>
                         </ul>
                     </div>
-                    <button onClick={toggleDarkMode} className="btn btn-sm btn-primary">DarkMode</button>
-                </nav>
-            </header>
+                    <div>
+                        <ul className="navbar-nav ml-auto">
+                            <li className="nav-item">
+                                <a className="nav-link">Items in Cart: {appState.totalValue}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
         </div>
         );
 }

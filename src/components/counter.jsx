@@ -4,9 +4,7 @@ import {countersContext} from "./context"
 function Counter () {
     const context = useContext(countersContext);
     console.log("context", context);
-    const key = context.key;
-    const state = context.state;
-    const setState = context.setState;
+    const [key, state, setState, onChange] = context
     
     console.log("key", key);
     console.log("state", state);
@@ -25,6 +23,7 @@ function Counter () {
         
         newState.counters[key].value++;
         setState(newState);
+        onChange();
     }
     const handleDecrement = () => {
         console.log("Handle Decrement is called", key);
@@ -32,6 +31,7 @@ function Counter () {
 
         newState.counters[key].value > 0 && state.counters[key].value--;
         setState(newState);
+        onChange();
     }
     const handleDelete = () => {
         console.log("Handle Delete is called", key);
@@ -40,6 +40,7 @@ function Counter () {
         delete newState.counters[key];
         console.log("new state", newState);
         setState(newState);
+        onChange();
     }
 
     console.log("key", key);
@@ -47,11 +48,11 @@ function Counter () {
     console.log("state.counters[key].id", state.counters);
     return (
         <React.Fragment>
-            <h5>{state.counters[key].id}. {state.counters[key].title}</h5>
+            <strong>{state.counters[key].title}<br/></strong>
             <span className={getBadgeClasses()}>{state.counters[key].value}</span>
-            <button onClick={() => handleIncrement()} className="m-1 btn btn-outline-success btn-sm">+</button>
-            <button onClick={() => handleDecrement()} className="m-1 btn btn-outline-danger btn-sm">-</button>
-            <button onClick={() => handleDelete()} className="m-1 btn btn-danger btn-sm">Delete</button>
+            <button onClick={() => handleIncrement()} className="btn btn-outline-success btn-sm m-1">+</button>
+            <button onClick={() => handleDecrement()} className="btn btn-outline-danger btn-sm m-1">-</button>
+            {state.showDeleteBtn === true && <button onClick={() => handleDelete()} className="m-1 btn btn-danger btn-sm">Delete</button>}
         </React.Fragment>);
 };
 export default Counter;
